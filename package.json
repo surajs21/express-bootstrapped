@@ -1,0 +1,24 @@
+{
+  "name": "express-bootstrapped",
+  "version": "1.0.0",
+  "description": "Express App with built-in utility sauces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surajs21/express-bootstrapped"
+  },
+  "keywords": [
+    "express",
+    "expressjs",
+    "express.js"
+  ],
+  "author": "Suraj Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/surajs21/express-bootstrapped/issues"
+  },
+  "homepage": "https://github.com/surajs21/express-bootstrapped"
+}
