@@ -1,15 +1,26 @@
 (function (module) {
     'use strict';
 
-    var express = require('express');
     var fs = require('fs');
-    var morgan = require('morgan');
     var appUtil = require('./helpers/util');
+    var log = appUtil.log;
+
+    // since we are using pm2
+    //var stdoutLog = fs.openSync(appUtil.appConfig.log_path + 'stdout.log', 'a');
+    //var stderrLog = fs.openSync(appUtil.appConfig.log_path + 'stderr.log', 'a');
+
+    //var daemon = require('daemon');
+    //
+    //daemon({
+    //    stdout: stdoutLog,
+    //    stderr: stderrLog
+    //});
+
+    var express = require('express');
+    var morgan = require('morgan');
     var bodyParser = require('body-parser');
     var domainMiddleware = require('express-domain-middleware');
     var routeBootstrap = require('./routes/bootstrap');
-
-    var log = appUtil.log;
 
     var app = function () {
     };
@@ -46,8 +57,14 @@
 
     app.prototype._handle404 = function () {
         this._app.use(function (req, res, next) {
+
+            var jsonView = new (appUtil.jsonView)();
+            jsonView.setErrorCode(1001);
+            jsonView.setMsg('Page not found');
+
             res.status(404);
-            res.end();
+            res.setHeader('Content-Type', 'application/json');
+            res.end(jsonView.render());
         });
     };
 
@@ -72,6 +89,12 @@
     app.prototype._listen = function(){
         this._app.listen(4000);
     };
+
+    process.on('uncaughtException', function(err) {
+        log.error(err, {
+            stacktrace: appUtil.codeHelper.parsetrace(err)
+        });
+    });
 
     module.exports = app;
 })(module);

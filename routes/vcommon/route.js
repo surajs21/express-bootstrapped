@@ -4,11 +4,20 @@
 
 (function (module) {
     'use strict';
+    var appUtil = require('./../../helpers/util');
 
     module.exports = {
         init: function (app) {
             app.post('/v1/learn', function(req, res){
-                throw new Error('shit');
+
+                var jsonView = new (appUtil.jsonView)();
+                jsonView.setErrorCode(0);
+                jsonView.setMsg('Shit Works!');
+
+                res.status(200);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(jsonView.render());
+
             });
         }
     };
