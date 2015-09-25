@@ -8,15 +8,24 @@
 
     module.exports = {
         init: function (app) {
-            app.post('/v1/learn', function(req, res){
+            app.post('/v1/learn', function (req, res) {
+                // curl http://localhost:4000/v1/learn -X POST -H"Content-Type: application/json" -d'{"foo":"bar"}'
+                var data = req.body;
+                var json = new (appUtil.jsonView)();
+                // some basic validation
+                if (!(data && data.foo)) {
+                    json.setMsg('Invalid Input');
+                    res.status(400);
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(json.render());
+                    return;
+                }
 
-                var jsonView = new (appUtil.jsonView)();
-                jsonView.setErrorCode(0);
-                jsonView.setMsg('Shit Works!');
-
+                json.setErrorCode(0);
+                json.data(data);
                 res.status(200);
                 res.setHeader('Content-Type', 'application/json');
-                res.end(jsonView.render());
+                res.end(json.render());
 
             });
         }
