@@ -28,6 +28,7 @@
     app.prototype.init = function () {
         this._app = express();
         this._initMiddleWares();
+        this._initViews();
         this._initRoutes();
         this._initErrorHandlers();
         this._listen();
@@ -50,6 +51,11 @@
 
     };
 
+    app.prototype._initViews = function () {
+        this._app.set('views', './views');
+        this._app.set('view engine', 'jade');
+    };
+
     app.prototype._initRoutes = function () {
         routeBootstrap.init(this._app);
         this._handle404();
@@ -68,7 +74,6 @@
         });
     };
 
-
     app.prototype._initErrorHandlers = function () {
         this._app.use(function (err, req, res, next) {
 
@@ -86,11 +91,11 @@
         });
     };
 
-    app.prototype._listen = function(){
+    app.prototype._listen = function () {
         this._app.listen(4000);
     };
 
-    process.on('uncaughtException', function(err) {
+    process.on('uncaughtException', function (err) {
         log.error(err, {
             stacktrace: appUtil.codeHelper.parsetrace(err)
         });
